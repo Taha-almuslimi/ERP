@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { cn } from '../ui/utils';
 
-export function FilterTabs({
+export default function FilterTabs({
   tabs,
   activeTab,
   onTabChange,

@@ -3,7 +3,7 @@ export { AppInput, AppSelect, AppTextarea, FieldLabel } from './AppField';
 export { DataTable } from './DataTable';
 export { DateRangeText, formatDisplayDate } from './DateRangeText';
 export { EmptyState } from './EmptyState';
-export { FilterTabs } from './FilterTabs';
+export { default as FilterTabs } from './FilterTabs';
 export { LoadingState, SkeletonBlock, SkeletonGrid } from './LoadingState';
 export { MoneyText, formatMoney } from './MoneyText';
 export { PageHeader } from './PageHeader';

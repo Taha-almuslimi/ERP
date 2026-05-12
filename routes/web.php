@@ -48,7 +48,7 @@ Route::get('/', function () {
 //     return Inertia::render('auth/register/RegisterPage');
 // });
 Route::get('/dashboard', function () {
-    $user = auth()->user();
+    $user = request()->user();
 
     if ($user && $user->type === 'owner') {
         return redirect()->route('owner.overview');
@@ -71,10 +71,10 @@ require __DIR__ . '/auth.php';
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard/myorders', function () {
-        return Inertia::render('Orders/MyOrdersPage');
+        return Inertia::render('Tenant/Orders/MyOrders/MyOrders');
     })->name('tenant.orders');
     Route::get('/dashboard/overview', function () {
-        return Inertia::render('Owner/Overview'); 
+        return Inertia::render('Owner/Overview');
     })->name('owner.overview');
     // User Profile (domain-specific)
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
