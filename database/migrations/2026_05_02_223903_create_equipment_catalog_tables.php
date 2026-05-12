@@ -121,7 +121,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->index(['equipment_id', 'unavailable_from', 'unavailable_to']);
+            $table->index(['equipment_id', 'unavailable_from', 'unavailable_to'], 'equipment_availability_dates_idx');
         });
     }
 

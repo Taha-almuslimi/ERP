@@ -1,120 +1,72 @@
-import InputError from '@/Components/InputError';
-import InputLabel from '@/Components/InputLabel';
-import PrimaryButton from '@/Components/PrimaryButton';
-import TextInput from '@/Components/TextInput';
-import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { useState } from "react";
+import { useForm } from "@inertiajs/react";
+import { FormSection } from "./Register/FormSection/FormSection";
+import { InfoSection } from "./Register/InfoSection/InfoSection";
 
 export default function Register() {
-    const { data, setData, post, processing, errors, reset } = useForm({
-        name: '',
-        email: '',
-        password: '',
-        password_confirmation: '',
+    const [userType, setUserType] = useState("tenant");
+    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [agreeToTerms, setAgreeToTerms] = useState(false);
+
+    const form = useForm({
+        full_name: "",
+        phone: "",
+        email: "",
+        password: "",
+        password_confirmation: "",
+        governorate: "",
+        district: "",
+        storeName: "",
+        mainGovernorate: "",
+        paymentMethod: "",
+        type: "tenant",
     });
 
-    const submit = (e) => {
-        e.preventDefault();
-
-        post(route('register'), {
-            onFinish: () => reset('password', 'password_confirmation'),
-        });
+    const toggleCategory = (category) => {
+        setSelectedCategories((prev) =>
+            prev.includes(category)
+                ? prev.filter((item) => item !== category)
+                : [...prev, category],
+        );
     };
 
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        form.setData("type", userType);
+        form.post("/register");
+    };
+
+    // Adapter to keep FormSection compatibility
+    // const formData = form.data;
+    // const setFormData = (updater) => {
+    //     if (typeof updater === "function") {
+    //         const updated = updater(form.data);
+    //         Object.keys(updated).forEach((key) =>
+    //             form.setData(key, updated[key]),
+    //         );
+    //     } else {
+    //         Object.keys(updater).forEach((key) =>
+    //             form.setData(key, updater[key]),
+    //         );
+    //     }
+    // };
+
     return (
-        <GuestLayout>
-            <Head title="Register" />
-
-            <form onSubmit={submit}>
-                <div>
-                    <InputLabel htmlFor="name" value="Name" />
-
-                    <TextInput
-                        id="name"
-                        name="name"
-                        value={data.name}
-                        className="mt-1 block w-full"
-                        autoComplete="name"
-                        isFocused={true}
-                        onChange={(e) => setData('name', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.name} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="email" value="Email" />
-
-                    <TextInput
-                        id="email"
-                        type="email"
-                        name="email"
-                        value={data.email}
-                        className="mt-1 block w-full"
-                        autoComplete="username"
-                        onChange={(e) => setData('email', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.email} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel htmlFor="password" value="Password" />
-
-                    <TextInput
-                        id="password"
-                        type="password"
-                        name="password"
-                        value={data.password}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) => setData('password', e.target.value)}
-                        required
-                    />
-
-                    <InputError message={errors.password} className="mt-2" />
-                </div>
-
-                <div className="mt-4">
-                    <InputLabel
-                        htmlFor="password_confirmation"
-                        value="Confirm Password"
-                    />
-
-                    <TextInput
-                        id="password_confirmation"
-                        type="password"
-                        name="password_confirmation"
-                        value={data.password_confirmation}
-                        className="mt-1 block w-full"
-                        autoComplete="new-password"
-                        onChange={(e) =>
-                            setData('password_confirmation', e.target.value)
-                        }
-                        required
-                    />
-
-                    <InputError
-                        message={errors.password_confirmation}
-                        className="mt-2"
-                    />
-                </div>
-
-                <div className="mt-4 flex items-center justify-end">
-                    <Link
-                        href={route('login')}
-                        className="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-400 dark:hover:text-gray-100 dark:focus:ring-offset-gray-800"
-                    >
-                        Already registered?
-                    </Link>
-
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Register
-                    </PrimaryButton>
-                </div>
-            </form>
-        </GuestLayout>
+        <main className="min-h-screen flex flex-col md:flex-row" dir="rtl">
+            <FormSection
+                userType={userType}
+                setUserType={setUserType}
+                formData={form.data}
+                setFormData={form.setData}
+                handleSubmit={handleSubmit}
+                selectedCategories={selectedCategories}
+                toggleCategory={toggleCategory}
+                agreeToTerms={agreeToTerms}
+                setAgreeToTerms={setAgreeToTerms}
+                errors={form.errors}
+                processing={form.processing}
+            />
+            <InfoSection userType={userType} />
+        </main>
     );
 }

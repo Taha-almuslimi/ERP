@@ -40,8 +40,21 @@ Route::get('/', function () {
     ]);
 });
 
+// Route::get('/login', function () {
+//     return Inertia::render('auth/login/Login');
+// })->name('login');
+
+// Route::get('/register', function () {
+//     return Inertia::render('auth/register/RegisterPage');
+// });
 Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
+    $user = auth()->user();
+
+    if ($user && $user->type === 'owner') {
+        return redirect()->route('owner.overview');
+    }
+
+    return redirect()->route('tenant.orders');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -50,12 +63,19 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // ==========================================
 // USER ROUTES (Requires Authentication)
 // ==========================================
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('/dashboard/myorders', function () {
+        return Inertia::render('Orders/MyOrdersPage');
+    })->name('tenant.orders');
+    Route::get('/dashboard/overview', function () {
+        return Inertia::render('Owner/Overview'); 
+    })->name('owner.overview');
     // User Profile (domain-specific)
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
     Route::put('user/profile', [UserController::class, 'update'])->name('user.profile.update');

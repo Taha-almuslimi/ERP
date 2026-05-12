@@ -14,7 +14,7 @@ class AuthController extends Controller
 {
     public function showLogin()
     {
-        return Inertia::render('Auth/Login');
+        return Inertia::render('Auth/Login/Login');
     }
 
     public function login(Request $request)
@@ -49,7 +49,7 @@ class AuthController extends Controller
 
         $user = User::create([
             ...$data,
-            'phone' => $data['phone'] ?? 'pending-'.Str::lower(Str::random(12)),
+            'phone' => $data['phone'] ?? 'pending-' . Str::lower(Str::random(12)),
             'type' => $data['type'] ?? 'tenant',
             'governorate' => $data['governorate'] ?? 'unknown',
             'password_hash' => Hash::make($password),
