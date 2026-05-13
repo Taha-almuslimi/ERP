@@ -11,7 +11,7 @@ import RentalsTable from './components/RentalsTable';
 import { RENTAL_TABS } from './rentalHelpers';
 import { useOwnerRentals } from './useOwnerRentals';
 
-const Rentals = () => {
+const Rentals = ({rentals}) => {
   const { props } = usePage();
   const user = props.auth?.user ?? null;
   const handoverReports = props.handover_reports ?? [];

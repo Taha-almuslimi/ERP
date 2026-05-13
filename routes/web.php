@@ -74,7 +74,7 @@ Route::middleware(['auth'])->group(function () {
         return Inertia::render('Tenant/Orders/MyOrders/MyOrders');
     })->name('tenant.orders');
     Route::get('/dashboard/overview', function () {
-        return Inertia::render('Owner/Overview');
+        return Inertia::render('Owner/Overview/Overview');
     })->name('owner.overview');
     // User Profile (domain-specific)
     Route::get('user/profile', [UserController::class, 'profile'])->name('user.profile');
